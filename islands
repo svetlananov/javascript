@@ -1,0 +1,224 @@
+n=5;
+m=4;
+
+var testArr=[[0,0,1,0,1],
+
+              [1,1,1,1,1],
+ 
+             [0,0,0,1,1],
+    
+           [1,0,0,0,0]];
+
+var coord ={i:0,
+          j:0};
+var k=0;
+var landArr = [];
+
+function  printArr1(land){
+  var str ="";
+  for (var f=0;f<land.length; f++){
+    str+= "["+land[f].i +"," + land[f].j +"]";
+
+  }
+  return str;
+}
+
+function printArr2(arr){
+  str ="";
+  for(var i=0;i<arr.length; i++){
+    str += ".."+  i+": " +printArr1(arr[i]) +"\n" ;
+  }
+  return str;
+}
+function printArr3(arr){
+  str ="";
+  for(var i=0;i<arr.length; i++){
+     str += i+": " +printArr2(arr[i]) +"\n" ;
+  }
+  return str;
+}
+
+
+function next(i,j){
+if(k>0){
+  var lastCheckedIsland = landArr[k-1];
+//console.log("lastCheckedIsland" + lastCheckedIsland);
+  var lastCheckedElement =lastCheckedIsland[lastCheckedIsland.length-1];
+  if(lastCheckedElement.i==i && lastCheckedElement.j>j){
+    j=lastCheckedElement.j
+  }
+}
+  var nextJ = j<n-1?j+1:0;
+  var nextI = nextJ==0?(i<m-1?i+1:-1):i;
+  coord.j=nextJ;
+  coord.i=nextI;
+ 
+  return coord;
+}
+
+function isDone(i,j){
+  if( i==-1)
+     return true;
+   else
+     return false;
+}
+
+function isLand(i,j){
+//console.log("["+ coord.i + "," + coord.j +"] = "  + testArr[i][j]);
+
+  if (testArr[i][j] == 1){
+    return true;
+  }else{
+    return false;
+  }
+}
+
+function goAroundIsland(land){
+ l=0
+  var i = land[l].i;
+  var j = land[l].j;
+ // console.log("[" +i + "," + j +"]");
+  while (isLand(i,j+1)){
+  // console.log("[" +i + "," + (j +1) + "]");
+ l++;   
+   land[l] = [];
+   land[l].i=land[l-1].i;
+   land[l].j = land[l-1].j+1;  
+   j++;
+  }
+}
+
+function getRowIsland(i,j){
+
+  var island=[];
+
+  var coordinates = {"i":0,"j":0};
+
+  coordinates.i = i;
+
+  coordinates.j = j;
+
+  island[0] = coordinates;
+
+  goAroundIsland(island);
+ return island;
+
+}
+
+function getRow(land){
+	return land[0].i;
+}
+
+  function areConnected(arr1, arr2){
+    var flag = false;
+    endFlag =false;
+       //loop through arr2 to find element with the row i-1 when arr1 has row # =i
+       var row =arr1[0].i;
+       k=0
+       //find first element with row index = row-1 
+       while(arr2[k].i < row-1 && k < arr2.length){
+         k++;
+       }
+       if(k == arr2.length){
+         endFlag= true;
+       }else{
+         // loop through arr1 elements and compare index j to index j in arr2
+         var x = 0;
+         var y = k
+         while(!(flag == true || x==arr1.length)){
+             if(arr1[x].j ==arr2[y].j){
+               flag =true;
+             } 
+             y++;
+             if(y == arr2.length){
+               x++;
+               y=k;
+             }
+         }
+       }
+    return flag;
+  }
+function mergeIslands(arr1, arr2){
+  var arr3  =[];
+  arr3 =arr2.concat(arr1);
+  return arr3;
+}
+
+function deepCopyArr(landRows){
+  var islands =[];
+  for(var i=0; i<landRows.length; i++){
+    islands[i] =[];
+    for(var j=0; j<landRows[i].length; j++){
+    islands[i][j]=[];
+      for(var k=0; k<landRows[i][j].length; k++){
+         islands[i][j][k] = {"i":landRows[i][j][k].i, "j": landRows[i][j][k].j}
+      }
+    }
+  }
+  return islands;
+}
+//find lands
+ while(!isDone(coord.i, coord.j)){
+  if (isLand(coord.i,coord.j)){
+   landArr[k] = getRowIsland(coord.i,coord.j); 
+    k++;
+  }
+  coord = next(coord.i,coord.j);
+
+ }
+
+ //place lands in rows
+  var landRows = [];
+  var num =0;
+  var currentRow =  landArr[0][0].i;
+  landRows[currentRow]= [];
+
+  landRows[currentRow][num] = landArr[0];
+
+ for (var  x = 1; x < landArr.length; x++){
+   var land= landArr[x];
+   var row =land[0].i;
+  //firstRow
+   if( row == currentRow){
+     num++;
+   
+   }else{
+   //second  and next rows
+     currentRow = row;
+     landRows[currentRow] =[];
+      num = 0;
+   }
+   landRows[currentRow][num] = land;
+ }
+ //glue island to lower row island if connected
+var islands =deepCopyArr(landRows);
+if(landRows.length>1) {
+//starting from 2nd row
+  for(var e=1; e<landRows.length; e++){
+        //loop through islands    
+  	for (var  r=0; r<landRows[e].length;   r++){
+         //loop and search for connected islands from upper row
+      var removed=[];
+	   for (var p=0; p < landRows[e-1].length; p++){
+       //compare j indexes
+        if(areConnected(landRows[e][r],landRows[e-1][p])){
+         islands[e][r] = mergeIslands(  islands[e][r], islands[e-1][p-removed.length]) ; 
+         removed =islands[e-1].splice(p-removed.length,1);  
+        }
+     }   
+  	}
+  }
+}
+
+console.log("islands: ");
+for (var i=0; i<islands.length; i++){
+  for (var j=0; j<islands[i].length; j++){
+     var str = "";
+    for (var k=0; k<islands[i][j].length; k++){
+      str+= "["+ islands[i][j][k].i +"," + islands[i][j][k].j +"]";  
+    }
+    console.log(str);
+  }
+
+}
+//console.log(printArr3(islands));
