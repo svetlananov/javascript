@@ -6,7 +6,7 @@
              [1, 0, 0, 1, 1],
 
            [1, 0, 0, 0, 0]];
-
+ 
     testArr = [[1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
            [1, 0, 0, 0, 0, 1, 1, 1, 1, 0],
            [1, 1, 0, 0, 1, 1, 1, 1, 1, 1],
@@ -18,8 +18,39 @@
            [1, 1, 0, 1, 1, 1, 1, 0, 0, 0],
            [0, 1, 0, 0, 0, 0, 0, 0, 1, 1]];
 
-  function printIslands(islands){
-   console.log("ISLANDS: " + islands.length);
+ /*  
+testArr =[["1","0","0"],
+          ["0","0","0"],
+          ["0","0","1"]];
+    testArr = 
+          [["1","1","1","1","1","0","1","1","1","1","1","1","1","1","1","0","1","0","1","1"],
+          ["0","1","1","1","1","1","1","1","1","1","1","1","1","0","1","1","1","1","1","0"],
+          ["1","0","1","1","1","0","0","1","1","0","1","1","1","1","1","1","1","1","1","1"],
+          ["1","1","1","1","0","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"],
+          ["1","0","0","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"],
+          ["1","0","1","1","1","1","1","1","0","1","1","1","0","1","1","1","0","1","1","1"],
+          ["0","1","1","1","1","1","1","1","1","1","1","1","0","1","1","0","1","1","1","1"],
+          ["1","1","1","1","1","1","1","1","1","1","1","1","0","1","1","1","1","0","1","1"],
+          ["1","1","1","1","1","1","1","1","1","1","0","1","1","1","1","1","1","1","1","1"],
+          ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"],
+          ["0","1","1","1","1","1","1","1","0","1","1","1","1","1","1","1","1","1","1","1"],
+          ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"],
+          ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"],
+          ["1","1","1","1","1","0","1","1","1","1","1","1","1","0","1","1","1","1","1","1"],
+          ["1","0","1","1","1","1","1","0","1","1","1","0","1","1","1","1","0","1","1","1"],
+          ["1","1","1","1","1","1","1","1","1","1","1","1","0","1","1","1","1","1","1","0"],
+          ["1","1","1","1","1","1","1","1","1","1","1","1","1","0","1","1","1","1","0","0"],
+          ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"],
+          ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"],
+          ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"]] ;
+
+
+testArr =[];
+
+testArr = [["1"]];
+*/
+function printIslands(islands){ 
+     console.log("ISLANDS: " + islands.length);
      for (var i = 0; i < islands.length; i++) {
         if (islands[i]) {
           console.log(printArr1(islands[i]));
@@ -48,9 +79,20 @@ function printTestData(){
       }
       return str;
     }
-    
+    function printSingleRowLand(arr){
+       var str = " ~ to (";
+        if (arr) {
+          for (var j = 0; j < arr.connectionDown.length; j++) {
+            str += arr.connectionDown[j] + ", ";
+          }
+
+          str += ") <- to (" + arr.connectionLeft + ") ";
+          str += " [" + printArr1(arr.land) + "]";
+        }
+        return str;
+    }
     function printOneRowLand(arr) {
-      str = "";
+      str = "ROW";
       for (var i = 0; i < arr.length; i++) {
         str += "; ~ to (";
         if (arr[i]) {
@@ -86,6 +128,7 @@ function printTestData(){
     }
 
     function printRowLands(arr) {
+      console.log("--- ROWLANDS: ---")
       str = "";
       for (var i = 0; i < arr.length; i++) {
         str += i + ": " + printOneRowLand(arr[i]) + "\n";
@@ -94,8 +137,17 @@ function printTestData(){
     }
 
 
+/*function checkIslands(i,j){
+      var flag =false; var x=0; var y = 0;
+      while(!flag && x[y]) {
+            
+      }
+      testArr[i][j]=1?true:false;
+      return flag;
+    }
 
-
+    */
+/*
     function generateMap(m, n) {
       for (var i = 0; i < m; i++) {
         testArr[i] = [];
@@ -104,11 +156,39 @@ function printTestData(){
         }
       }
     }
+  */
+    function getIslands(landRows) {
+      var islands = [];
+      var k = 0;
+  //    console.log(landRows.length);
+         for (var e = 0; e < landRows.length; e++) {
+        var row =landRows[e];
+        if(row){
+  //       console.log(row.length);
+        for (var f = 0; f < row.length; f++) {
+            var land = row[f];
+            if (land) {
+              islands[k] = land.land;
+              k++;
+            }
+          }
+       }
+      }
+      return islands;
+    }
 //generateMap(m,n);
-  
- var  islands =islands(testArr);
-
-printTestData()
+  var landRows =islands(testArr);
+  var count =getCount(landRows);
+ var  islands =getIslands(landRows);
+   console.log("Total islands:" + count);
+ /*if(!islands){
+         console.log("Total islands:" + 0);
+ 
+    }else{
+         console.log("Total islands:" + islands.length);
+ }
+ */
+ printTestData()
     console.log("%c" + printRowIslands(landRows), "color: red");
      /*   console.log("%cI am red %cI am green", "color: red", "color: green");
 

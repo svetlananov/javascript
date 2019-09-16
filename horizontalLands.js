@@ -1,79 +1,48 @@
    
  //1 dimentional lands functions
-    function isLand(i, j,testArr) {
+    function isLand(cell) {
 
-      if (testArr[i][j] == 1) {
+      if (cell == 1) {
         return true;
       } else {
         return false;
       }
     }
-
-    function isDone(i, j) {
-      if (i == -1)
-        return true;
-      else
-        return false;
+    function getRowLandObject() {
+      var rowLand = {
+        connectionDown: [],
+        connectionLeft: -1,
+        land: []
+      };
+      // rowLand.connectionDown[0]=-1;
+      return rowLand;
     }
 
-     function next(isNotFirstLand,i, j,lastCheckedIsland, m,n) {
-       var coord ={"i":0,"j":0}
-      if (isNotFirstLand ) {
-        var lastCheckedCoord = lastCheckedIsland[lastCheckedIsland.length - 1];
-        if (lastCheckedCoord.i == i && lastCheckedCoord.j > j) {
-          j = lastCheckedCoord.j;
+    function getHorizontalLand(i,j,row) {
+      l = 0;
+      var landObj=getRowLandObject();
+      var land = [];
+        landObj.land[0] = {"i":i,"j":j};
+        while (isLand(row[++j ])) {
+          landObj.land[++l] = {"i":i, "j":j };
+        }
+      return landObj;
+    }
+
+ 
+ function getRowOfLands(i,row){
+  var landArr = [];  
+    var k = 0;
+     var j=0;
+      while (j<row.length) {
+       if (isLand(row[j])) {
+          landArr[k] = getHorizontalLand(i,j,row);
+          j+= landArr[k].land.length;
+          k++;
+        }else{
+          j++;
         }
       }
-      var nextJ = j < n - 1 ? j + 1 : 0;
-      var nextI = nextJ == 0 ? (i < m - 1 ? i + 1 : -1) : i;
-      coord.j = nextJ;
-      coord.i = nextI;
-
-      return coord;
-    }
-
-      function getHorizontalLand(i, j,testArr) {
-      l = 0;
-      var land = [];
-       var coordinates = { "i": 0, "j": 0 };
-
-      coordinates.i = i;
-
-      coordinates.j = j;
-
-      land[0] = coordinates;
-
-      var i = land[l].i;
-      var j = land[l].j;
-      while (isLand(i, j + 1,testArr)) {
-        l++;
-        land[l] = [];
-        land[l].i = land[l - 1].i;
-        land[l].j = land[l - 1].j + 1;
-        j++;
-      }
-      return land;
-    }
+     return landArr;
+  }
  
-    
-
-     function getAllLands(testArr){
-      //console.log("%cI am red %cI am green", "color: red", "color: green");
-    //find 1-dimentional lands
-    var coord = {
-      i: 0,
-      j: 0
-    };
-    var k = 0;
-    var landArr = [];
-
-    while (!isDone(coord.i, coord.j)) {
-      if (isLand(coord.i, coord.j,testArr)) {
-        landArr[k] = getHorizontalLand(coord.i, coord.j,testArr);
-        k++;
-      }
-      coord = next(landArr.length>0, coord.i, coord.j,landArr[k-1],testArr.length, testArr[0].length);
-
-    }
-    return landArr;
- }
