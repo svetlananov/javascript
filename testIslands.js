@@ -1,13 +1,19 @@
  
-    var testArr = [[0, 0, 1, 0, 1],
-
-              [1, 1, 1, 1, 1],
-
-             [1, 0, 0, 1, 1],
-
-           [1, 0, 0, 0, 0]];
- 
-    testArr = [[1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+ testArr = [
+[["1","1","0","0","0"],
+["1","1","0","0","0"],
+["0","0","1","0","0"],
+["0","0","0","1","1"]],                  
+                  [[1,1,1,1,0],
+                  [1,1,0,1,0],
+                  [1,1,0,0,0],
+                  [0,0,0,0,0]],
+  
+                [[0, 0, 1, 0, 1],
+                [1, 1, 1, 1, 1],
+                [1, 0, 0, 1, 1],
+                [1, 0, 0, 0, 0]],
+  [[1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
            [1, 0, 0, 0, 0, 1, 1, 1, 1, 0],
            [1, 1, 0, 0, 1, 1, 1, 1, 1, 1],
            [0, 1, 0, 0, 0, 1, 0, 1, 0, 1],
@@ -16,13 +22,11 @@
            [0, 1, 0, 0, 0, 1, 0, 0, 0, 1],
            [1, 0, 1, 0, 0, 0, 0, 0, 0, 1],
            [1, 1, 0, 1, 1, 1, 1, 0, 0, 0],
-           [0, 1, 0, 0, 0, 0, 0, 0, 1, 1]];
-
- /*  
-testArr =[["1","0","0"],
+           [0, 1, 0, 0, 0, 0, 0, 0, 1, 1]],
+[["1","0","0"],
           ["0","0","0"],
-          ["0","0","1"]];
-    testArr = 
+          ["0","0","1"]],
+    
           [["1","1","1","1","1","0","1","1","1","1","1","1","1","1","1","0","1","0","1","1"],
           ["0","1","1","1","1","1","1","1","1","1","1","1","1","0","1","1","1","1","1","0"],
           ["1","0","1","1","1","0","0","1","1","0","1","1","1","1","1","1","1","1","1","1"],
@@ -42,13 +46,13 @@ testArr =[["1","0","0"],
           ["1","1","1","1","1","1","1","1","1","1","1","1","1","0","1","1","1","1","0","0"],
           ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"],
           ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"],
-          ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"]] ;
+          ["1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1","1"]],
 
 
-testArr =[];
+[],
 
-testArr = [["1"]];
-*/
+ [["1"]]]
+
 function printIslands(islands){ 
      console.log("ISLANDS: " + islands.length);
      for (var i = 0; i < islands.length; i++) {
@@ -59,7 +63,7 @@ function printIslands(islands){
 
     }
 
-function printTestData(){
+function printTestData(testArr){
       console.log("TEST DATA");
       for (var i = 0; i < testArr.length; i++) {
         var str = "";
@@ -93,6 +97,7 @@ function printTestData(){
     }
     function printOneRowLand(arr) {
       str = "ROW";
+      if(arr){
       for (var i = 0; i < arr.length; i++) {
         str += "; ~ to (";
         if (arr[i]) {
@@ -103,6 +108,7 @@ function printTestData(){
           str += ") <- to (" + arr[i].connectionLeft + ") ";
           str += " [" + printArr1(arr[i].land) + "]";
         }
+      }
       }
       return str;
     }
@@ -157,7 +163,7 @@ function printTestData(){
       }
     }
   */
-    function getIslands(landRows) {
+ /*   function getIslands(landRows) {
       var islands = [];
       var k = 0;
   //    console.log(landRows.length);
@@ -176,10 +182,13 @@ function printTestData(){
       }
       return islands;
     }
+*/
 //generateMap(m,n);
-  var landRows =islands(testArr);
-  var count =getCount(landRows);
- var  islands =getIslands(landRows);
+for(var i = 0;i<testArr.length;i++){
+  var count =islands(testArr[i]);
+//  var landRows =islands(testArr);
+ // var count =getCount(landRows);
+ //var  islands =getIslands(landRows);
    console.log("Total islands:" + count);
  /*if(!islands){
          console.log("Total islands:" + 0);
@@ -188,8 +197,9 @@ function printTestData(){
          console.log("Total islands:" + islands.length);
  }
  */
- printTestData()
-    console.log("%c" + printRowIslands(landRows), "color: red");
+ printTestData(testArr[i]);
+ }
+  //  console.log("%c" + printRowIslands(landRows), "color: red");
      /*   console.log("%cI am red %cI am green", "color: red", "color: green");
 
 
@@ -204,4 +214,4 @@ function printTestData(){
 
        }
       */
-      printIslands(islands);
+    //  printIslands(islands);
