@@ -17,14 +17,13 @@
       // rowLand.connectionDown[0]=-1;
       return rowLand;
     }
-
     function getHorizontalLand(i,j,row) {
       l = 0;
       var landObj=getRowLandObject();
       var land = [];
-        landObj.land[0] = {"i":i,"j":j};
+        landObj.land[0] = j;
         while (isLand(row[++j ])) {
-          landObj.land[++l] = {"i":i, "j":j };
+          landObj.land[++l] = j;
         }
       return landObj;
     }
