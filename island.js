@@ -1,6 +1,6 @@
- 
+
     //2-dimentional functionality
-     function areConnected(arr1, upperLand) {
+/*     function areConnectedOld(arr1, upperLand) {
       var flag = false;
       if (arr1 != [] && upperLand != []) {
         // loop through  elements and compare index j to index j in upperLand
@@ -20,23 +20,37 @@
 
       return flag;
     }
-     function areConnectedNew(lowerLand, upperLand) {
+ */ 
+function isInRange(elem, range){
+   var flag = false;
+   if(range[0]<=elem && elem<= range[1]){
+     flag = true;
+   }
+   return flag;
+} 
+ function areConnected(lowerLand, upperLand) {
       var flag = false;
       if (lowerLand != [] && upperLand != []) {
-     
-        var lowerFirst=lowerLand[0]; 
-        var lowerLast=lowerLand[lowerLand.length-1]; 
-        var upperFirst=upperLand[0]; 
-        var upperLast=upperLand[upperLand.length-1]; 
-        if(lowerFirst<=upperFirst && lowerLast>=upperFirst
-            || lowerFirst<=upperLast && lowerLast>=upperLast
-            || lowerFirst>=upperFirst && lowerLast<=upperLast){
-              flag= true;
+        // loop through  elements and compare index j to index j in upperLand
+          var y = 0;
+        while (!flag && y < upperLand.length) {
+           var x = 0;
+            while (!flag && x < lowerLand.length) {
+              if(isInRange(upperLand[y][0],lowerLand[x])
+                 || isInRange(lowerLand[x][0],upperLand[y])){
+                flag= true;
+              }else{
+                 x++;
+              }
+            }
+            if(!flag){
+               y++;
+            }
         }
       }
       return flag;
     }
-
+  
     function arrayUnique(array1, array2) {
       var a = array1.concat(array2);
       for (var i = 0; i < a.length; ++i) {
@@ -68,8 +82,8 @@
           }
          return connectionLeft;
        }
-
-    function setConnectionDown(upperRow, lowerRow){
+/*
+    function setConnectionDownOld(upperRow, lowerRow){
       var nextUpperLandFlag=true;
       var p=0;
       while( p < upperRow.length){
@@ -97,6 +111,37 @@
         }
         return upperRow;
      }
+*/
+function setConnectionDown(upperRow, lowerRow){
+      var nextUpperLandFlag=true;
+      var p=0;
+      while( p < upperRow.length){
+      //           console.log("upperLand: "+printArr1New(upperRow[p].land));
+        var upperLand=upperRow[p].land;
+        nextUpperLandFlag=false;
+        var f = 0;
+        var r=0;
+        while(!nextUpperLandFlag && r < lowerRow.length){
+          var lowerLand = lowerRow[r].land;
+          if( lowerLand[0][0] <= upperLand[upperLand.length-1][1]){
+            if(lowerLand[lowerLand.length-1][1] >= upperLand[0][0]){
+      //         console.log("lowerLand: "+ printArr1New(lowerRow[r].land));
+              if ( areConnected(lowerLand, upperLand)) {
+                      upperRow[p].connectionDown[f] = r;
+                  f++;
+            //                console.log("upperLand ["  + p +"] is connected to lowerLand [" + r + "]"  );
+                }
+              }
+               r++;// nextLowerLand
+            
+            }else{ 
+              nextUpperLandFlag=true;//drop skimming lower land for this upper land and take a new upperLand
+            }
+          } 
+          p++;    
+        }
+        return upperRow;
+     }
 
   function mergeLeft(row,f){
     var land = row[f];
@@ -107,7 +152,7 @@
       row =  deleteLandNew(row, f);
     return row;
   }
-
+/*
  function  mergeLeftConnections(row){
    for (var f = row.length - 1; f >= 0; f--) {
       var land = row[f];
@@ -142,6 +187,7 @@
    }
   return row;
  }
+  */
   function  mergeLeftCover(row){
    for (var f = row.length - 1; f >= 0; f--) {
       var land = row[f];
@@ -197,7 +243,7 @@
     
       return {"upperRow":upperRow,"lowerRow":lowerRow };
   }
-
+/*
 function countCompletedIslands(row){
   var count = 0;
   if(row){
@@ -220,6 +266,7 @@ function countCompletedConnectedIslands(row){
   }
   return count;
 }
+  */
     //================== islands =================
 function islands(testArr){
   var count=0;
@@ -249,15 +296,17 @@ function islands(testArr){
         if(i<testArr.length-1){//--not the last row 
            //check if next row is not empty
             lowerRow = getRowOfLands(i+1,testArr[i+1]);
-      //             console.log( "==000====== "); 
-      //       console.log(" upper" +printOneRowLand(upperRow) );
-      //        console.log( "lower " +printOneRowLand(lowerRow) );
+         //          console.log( "==000====== "); 
+           //        console.log(testArr[i]);
+           // console.log(" upper" +printOneRowLandNew(upperRow) );
+            //         console.log(testArr[i+1]);
+            //console.log( "lower " +printOneRowLandNew(lowerRow) );
           if(lowerRow && lowerRow.length>0){//---good pair of rows
             //calculation connections to lowerRow (i)->(i+1)
             upperRow =setConnectionDown(upperRow,lowerRow );
-        //               console.log( "====111==== "); 
-        //     console.log(" upper" +printOneRowLand(upperRow) );
-        //      console.log( "lower " +printOneRowLand(lowerRow) );
+      //                 console.log( "==== "+ i +" ==== "); 
+      //       console.log(" upper" +printOneRowLandNew(upperRow) );
+          //    console.log( "lower " +printOneRowLandNew(lowerRow) );
     
             //mergeDown upperRow and setLeftConnection for lowerRow
             //calculate left connections for lowerRow

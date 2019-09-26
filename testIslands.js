@@ -61,7 +61,9 @@
 
 [["1","0","1","1","1"],
  ["1","0","1","0","1"],
- ["1","1","1","0","1"]]]
+ ["1","1","1","0","1"]]
+ 
+]
 
 function printIslands(islands){ 
      console.log("ISLANDS: " + islands.length);
@@ -85,7 +87,15 @@ function printTestData(testArr){
       }
     }
     
-    function printArr1(land) {
+    function printArr1New(land) {
+      var str = "";
+      for (var f = 0; f < land.length; f++) {
+        str += "[" + land[f][0] + "," + land[f][1] + "]";
+
+      }
+      return str;
+    }
+     function printArr1(land) {
       var str = "";
       for (var f = 0; f < land.length; f++) {
         str += "[" + land[f].i + "," + land[f].j + "]";
@@ -122,7 +132,23 @@ function printTestData(testArr){
       }
       return str;
     }
+   function printOneRowLandNew(arr) {
+      str = "ROW";
+      if(arr){
+      for (var i = 0; i < arr.length; i++) {
+        str += "; ~ to (";
+        if (arr[i]) {
+          for (var j = 0; j < arr[i].connectionDown.length; j++) {
+            str += arr[i].connectionDown[j] + ", ";
+          }
 
+          str += ") <- to (" + arr[i].connectionLeft + ") ";
+          str += " [" + printArr1New(arr[i].land) + "]";
+        }
+      }
+      }
+      return str;
+    }
     function printOneIsland(arr) {
       str = "";
       for (var i = 0; i < arr.length; i++) {
